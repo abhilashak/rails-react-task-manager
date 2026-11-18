@@ -58,7 +58,7 @@ RSpec.describe User do
           emails << user.email
           expect(user.persisted?).to eq(false)
         end
-        expect(emails.size).to eq(3)
+        expect(emails.uniq.size).to eq(3)
       end
     end
   end
