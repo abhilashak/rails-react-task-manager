@@ -74,9 +74,17 @@ RSpec.describe User, type: :model do
       it "password digest does not equal the original password" do
         expect(valid_user.password_digest).not_to eq(valid_user.password)
       end
+    end
 
-      it "The password digest is stored, not the plain-text password" do
-        # expect(valid_user.password_digest).
+    context "With Traits" do
+      it "verify with password confirmation" do
+        user = build(:user, :with_password_confirmation)
+        expect(user.valid?).to eq(true)
+      end
+      it "verify with invalid password confirmation" do
+        user = build(:user, :with_invalid_password_confirmation)
+        expect(user.valid?).to eq(false)
+        expect(user.errors.full_messages).to include("Password confirmation doesn't match Password")
       end
     end
   end

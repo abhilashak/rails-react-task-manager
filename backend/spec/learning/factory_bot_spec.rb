@@ -44,4 +44,40 @@ RSpec.describe User do
       expect(user.email).to eq('emailtest1@example.com')
     end
   end
+
+  describe "Factory Bot: Build list" do
+    context "create three users and verify" do
+      it "contains 3 users" do
+        users = build_list(:user, 3)
+        expect(users.size).to eq(3)
+      end
+      it "3 users are not persisted and emails are unique" do
+        users = build_list(:user, 3)
+        emails = []
+        users.each do |user|
+          emails << user.email
+          expect(user.persisted?).to eq(false)
+        end
+        expect(emails.size).to eq(3)
+      end
+    end
+  end
+
+  describe "Factory Bot: Create list" do
+    context "create three users and verify" do
+      it "contains 3 users" do
+        users = create_list(:user, 3)
+        expect(users.size).to eq(3)
+      end
+      it "all users are persisted and have unique ids" do
+        users = create_list(:user, 3)
+        user_ids = []
+        users.each do |user|
+          user_ids << user.id
+          expect(user.persisted?).to eq(true)
+        end
+        expect(user_ids.size).to eq(3)
+      end
+    end
+  end
 end
