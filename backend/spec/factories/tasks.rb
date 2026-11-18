@@ -1,8 +1,9 @@
 FactoryBot.define do
   factory :task do
-    title { "MyString" }
-    description { "MyText" }
+    title { "Improve Product" }
+    description { "Improve the product page by minimizing the dependancies" }
     status { 1 }
-    user { nil }
+
+    association :user
   end
 end
