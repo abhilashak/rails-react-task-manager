@@ -6,7 +6,9 @@ RSpec.describe Task, type: :model do
       it "task is not persisted and has a non-persisted user object associated with it" do
         task = build(:task)
         expect(task.persisted?).to eq(false)
-        expect(task.user.is_a?(User)).to eq(true)
+        # expect(task.user.is_a?(User)).to eq(true)
+        # Prefer RSpec's type matcher
+        expect(task.user).to be_a(User)
         expect(task.user.persisted?).to eq(false)
       end
     end
@@ -15,7 +17,9 @@ RSpec.describe Task, type: :model do
       it "task is persisted and has a persisted user object associated with it" do
         task = create(:task)
         expect(task.persisted?).to eq(true)
-        expect(task.user.is_a?(User)).to eq(true)
+        # expect(task.user.is_a?(User)).to eq(true)
+        # Prefer RSpec's type matcher
+        expect(task.user).to be_a(User)
         expect(task.user.persisted?).to eq(true)
         expect(task.user.id).to eq(task.user_id)
       end
@@ -33,12 +37,13 @@ RSpec.describe Task, type: :model do
       it "one user and three task associations" do
         user = create(:user)
         tasks = create_list(:task, 3, user: user)
-        task_ids = []
+        # task_ids = []
         tasks.each do |task|
-          task_ids << task.id
+          # task_ids << task.id
           expect(task.user).to equal(user)
         end
-        expect(user.tasks.pluck(:id)).to eql(task_ids)
+        # expect(user.tasks.pluck(:id)).to eql(task_ids) prefer below
+        expect(user.tasks).to match_array(tasks)
       end
     end
   end

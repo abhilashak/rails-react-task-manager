@@ -32,7 +32,8 @@ RSpec.describe User do
     it "user persisted and has an id matches User.find" do
       user = create(:user)
       expect(user.persisted?).to be(true)
-      expect(user.id.is_a?(Integer)).to eq(true)
+      # expect(user.id.is_a?(Integer)).to eq(true) prefer:
+      expect(user.id).to be_a(Integer)
       find_user = User.find(user.id)
       expect(find_user).to eql(user)
     end
