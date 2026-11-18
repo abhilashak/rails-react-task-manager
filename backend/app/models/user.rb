@@ -3,6 +3,8 @@ class User < ApplicationRecord
 
   normalizes :email, with: -> (email) { email.strip.downcase }
 
+  has_many :tasks, dependant: :destroy
+
   validates :email, presence: true, uniqueness: true
   validates :password_digest, presence: true
 end
