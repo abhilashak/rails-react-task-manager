@@ -76,7 +76,7 @@ RSpec.describe User do
           user_ids << user.id
           expect(user.persisted?).to eq(true)
         end
-        expect(user_ids.size).to eq(3)
+        expect(user_ids.uniq.size).to eq(3)
       end
     end
   end
