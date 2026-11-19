@@ -41,4 +41,57 @@ RSpec.describe Task, type: :model do
       expect(task.valid?).to eq(false)
     end
   end
+
+  describe "status" do
+    it "default status" do
+      task = build(:task)
+      expect(task.status).to eq('pending')
+      expect(task.pending?).to eq(true)
+      expect(task.completed?).to eq(false)
+    end
+
+    it "status assignment" do
+      task = build(:task, status: :in_progress)
+      expect(task.status).to eq('in_progress')
+      expect(task.in_progress?).to eq(true)
+      expect(task.pending?).to eq(false)
+    end
+
+    it "status bang methods" do
+      task = build(:task)
+      task.completed!
+      expect(task.status).to eq('completed')
+      expect(task.completed?).to eq(true)
+      expect(task.pending?).to eq(false)
+      task.reload # confirm db persistence
+      expect(task.completed?).to eq(true)
+    end
+
+    it "Enum mapping" do
+      status = described_class.statuses
+      expect(status['pending']).to eq(0)
+      expect(status['in_progress']).to eq(1)
+      expect(status['completed']).to eq(2)
+    end
+
+    it "Invalid status" do
+      task = build(:task)
+      task.status = :invalid
+      expect(task.valid?).to eq(false)
+      not_included_msg = "Status is not included in the list"
+      expect(task.errors.full_messages).to include(not_included_msg)
+      task.status = nil
+      task.valid?
+      expect(task.errors.full_messages).to include(not_included_msg)
+    end
+
+    it "Enum scopes" do
+      task1 = create(:task)
+      task2 = create(:task, status: :in_progress)
+      task3 = create(:task, status: :completed)
+      expect(Task.pending).to eq(Task.where(status: :pending))
+      expect(Task.in_progress).to eq(Task.where(status: :in_progress))
+      expect(Task.completed).to eq(Task.where(status: :completed))
+    end
+  end
 end
