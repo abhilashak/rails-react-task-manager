@@ -58,7 +58,7 @@ RSpec.describe Task, type: :model do
     end
 
     it "status bang methods" do
-      task = build(:task)
+      task = create(:task)
       task.completed!
       expect(task.status).to eq('completed')
       expect(task.completed?).to eq(true)
@@ -86,12 +86,26 @@ RSpec.describe Task, type: :model do
     end
 
     it "Enum scopes" do
-      task1 = create(:task)
-      task2 = create(:task, status: :in_progress)
-      task3 = create(:task, status: :completed)
-      expect(Task.pending).to eq(Task.where(status: :pending))
-      expect(Task.in_progress).to eq(Task.where(status: :in_progress))
-      expect(Task.completed).to eq(Task.where(status: :completed))
+      pending = create(:task)
+      in_progress = create(:task, status: :in_progress)
+      completed = create(:task, status: :completed)
+      expect(Task.pending).to contain_exactly(pending)
+      expect(Task.in_progress).to contain_exactly(in_progress)
+      expect(Task.completed).to contain_exactly(completed)
+    end
+  end
+
+  describe "associations" do
+    it "belongs_to" do
+      task = create(:task)
+      expect(task.user).to be_truthy
+      expect(task.user_id).to be_truthy
+    end
+    it "has_many" do
+      user = create(:user)
+      create_list(:task, 3, user: user)
+
+      expect(user.tasks.count).to eq(3)
     end
   end
 end
