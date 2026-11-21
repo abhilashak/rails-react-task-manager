@@ -8,7 +8,7 @@ module Authentication
 
         token_payload = payload.merge(sub: user.id.to_s)
 
-        JWT.encode(token_payload, signing_secret, ALGORITHM)
+        JWT.encode(token_payload, signing_secret, Base::ALGORITHM)
       end
     end
   end
