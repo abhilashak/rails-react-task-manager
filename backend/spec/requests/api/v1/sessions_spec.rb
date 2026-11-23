@@ -4,6 +4,15 @@ require "rails_helper"
 RSpec.describe "API V1 Sessions", type: :request do
   let(:endpoint) { "/api/v1/auth/login" }
 
+  let(:origin_headers) do
+    {
+      "Origin" => ENV.fetch(
+        "FRONTEND_ORIGIN",
+        "http://localhost:5173"
+      )
+    }
+  end
+
   let(:user) do
     create(
       :user,
@@ -30,13 +39,13 @@ RSpec.describe "API V1 Sessions", type: :request do
   describe "POST /api/v1/auth/login" do
     context "with valid credentials" do
       it "returns 200 OK" do
-        post endpoint, params: valid_params, as: :json
+        post endpoint, params: valid_params, as: :json, headers: origin_headers
 
         expect(response).to have_http_status(:ok)
       end
 
       it "returns an access token" do
-        post endpoint, params: valid_params, as: :json
+        post endpoint, params: valid_params, as: :json, headers: origin_headers
 
         body = response.parsed_body
 
@@ -47,7 +56,7 @@ RSpec.describe "API V1 Sessions", type: :request do
       end
 
       it "returns the authenticated user" do
-        post endpoint, params: valid_params, as: :json
+        post endpoint, params: valid_params, as: :json, headers: origin_headers
 
         expect(response.parsed_body.dig("data", "user")).to eq(
           {
@@ -58,7 +67,7 @@ RSpec.describe "API V1 Sessions", type: :request do
       end
 
       it "generates a valid JWT for the authenticated user" do
-        post endpoint, params: valid_params, as: :json
+        post endpoint, params: valid_params, as: :json, headers: origin_headers
 
         token = response.parsed_body.dig("data", "access_token")
 
@@ -69,7 +78,7 @@ RSpec.describe "API V1 Sessions", type: :request do
       end
 
       it "does not expose sensitive user attributes" do
-        post endpoint, params: valid_params, as: :json
+        post endpoint, params: valid_params, as: :json, headers: origin_headers
 
         body = response.parsed_body
 
@@ -87,7 +96,7 @@ RSpec.describe "API V1 Sessions", type: :request do
           login: { password: "wrong-password" }
         )
 
-        post endpoint, params: params, as: :json
+        post endpoint, params: params, as: :json, headers: origin_headers
 
         expect(response).to have_http_status(:unauthorized)
         expect(response.parsed_body).to eq(invalid_response)
@@ -101,7 +110,7 @@ RSpec.describe "API V1 Sessions", type: :request do
           }
         }
 
-        post endpoint, params: params, as: :json
+        post endpoint, params: params, as: :json, headers: origin_headers
 
         expect(response).to have_http_status(:unauthorized)
         expect(response.parsed_body).to eq(invalid_response)
@@ -112,7 +121,7 @@ RSpec.describe "API V1 Sessions", type: :request do
           login: { email: nil }
         )
 
-        post endpoint, params: params, as: :json
+        post endpoint, params: params, as: :json, headers: origin_headers
 
         expect(response).to have_http_status(:unauthorized)
         expect(response.parsed_body).to eq(invalid_response)
@@ -123,7 +132,7 @@ RSpec.describe "API V1 Sessions", type: :request do
           login: { password: nil }
         )
 
-        post endpoint, params: params, as: :json
+        post endpoint, params: params, as: :json, headers: origin_headers
 
         expect(response).to have_http_status(:unauthorized)
         expect(response.parsed_body).to eq(invalid_response)
@@ -134,7 +143,7 @@ RSpec.describe "API V1 Sessions", type: :request do
           login: { password: "wrong-password" }
         )
 
-        post endpoint, params: invalid_password_params, as: :json
+        post endpoint, params: invalid_password_params, as: :json, headers: origin_headers
 
         first_response = response.parsed_body
 
@@ -145,7 +154,7 @@ RSpec.describe "API V1 Sessions", type: :request do
                  password: "password@1"
                }
              },
-             as: :json
+             as: :json, headers: origin_headers
 
         second_response = response.parsed_body
 
@@ -159,7 +168,7 @@ RSpec.describe "API V1 Sessions", type: :request do
           login: { email: "TEST@EXAMPLE.COM" }
         )
 
-        post endpoint, params: params, as: :json
+        post endpoint, params: params, as: :json, headers: origin_headers
 
         expect(response).to have_http_status(:ok)
       end

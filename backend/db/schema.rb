@@ -10,9 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_18_112021) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_23_104442) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "refresh_sessions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "token_digest", null: false
+    t.uuid "family_id", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "revoked_at"
+    t.datetime "rotated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["family_id"], name: "index_refresh_sessions_on_family_id"
+    t.index ["token_digest"], name: "index_refresh_sessions_on_token_digest", unique: true
+    t.index ["user_id"], name: "index_refresh_sessions_on_user_id"
+  end
 
   create_table "tasks", force: :cascade do |t|
     t.string "title", null: false
@@ -32,5 +46,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_112021) do
     t.index "lower((email)::text)", name: "idx_users_lower_email", unique: true
   end
 
+  add_foreign_key "refresh_sessions", "users"
   add_foreign_key "tasks", "users"
 end

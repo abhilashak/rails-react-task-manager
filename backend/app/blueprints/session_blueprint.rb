@@ -3,7 +3,7 @@ class SessionBlueprint < Blueprinter::Base
     options.fetch(:access_token)
   end
 
-  field :token_type do |_user, _options|
+  field :token_type do
     "Bearer"
   end
 
@@ -11,7 +11,7 @@ class SessionBlueprint < Blueprinter::Base
     options.fetch(:expires_in)
   end
 
-  association :user, blueprint: UserBlueprint do |user, _options|
-    user
+  field :user do |user, _options|
+    UserBlueprint.render_as_hash(user)
   end
 end

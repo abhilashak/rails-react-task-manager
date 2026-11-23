@@ -12,6 +12,8 @@ Rails.application.routes.draw do
       post "auth/register", to: "registrations#create"
 
       post "auth/login", to: "sessions#create"
+      post "auth/refresh", to: "sessions#refresh"
+      delete "auth/logout", to: "sessions#destroy"
     end
   end
 end
