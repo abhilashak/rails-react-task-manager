@@ -14,6 +14,8 @@ Rails.application.routes.draw do
       post "auth/login", to: "sessions#create"
       post "auth/refresh", to: "sessions#refresh"
       delete "auth/logout", to: "sessions#destroy"
+
+      resources :tasks, only: %i[index show create update destroy]
     end
   end
 end
