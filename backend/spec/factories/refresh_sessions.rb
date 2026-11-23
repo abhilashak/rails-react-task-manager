@@ -1,10 +1,18 @@
+require "digest"
+require "securerandom"
+
 FactoryBot.define do
   factory :refresh_session do
-    user { nil }
-    token_digest { "MyString" }
-    family_id { "" }
-    expires_at { "2026-11-23 16:14:42" }
-    revoked_at { "2026-11-23 16:14:42" }
-    rotated_at { "2026-11-23 16:14:42" }
+    association :user
+
+    token_digest do
+      Digest::SHA256.hexdigest(
+        SecureRandom.urlsafe_base64(64)
+      )
+    end
+
+    family_id { SecureRandom.uuid }
+
+    expires_at { 7.days.from_now }
   end
 end
