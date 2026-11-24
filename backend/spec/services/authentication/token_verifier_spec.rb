@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe Authentication::TokenVerifier do
   let(:user) { create(:user) }
-  let(:secret) { Rails.application.credentials.dig(:jwt, :secret_key) }
+  let(:secret) { ENV["JWT_SECRET_KEY"].presence || Rails.application.credentials.dig(:jwt, :secret_key) }
   let(:valid_token) { Authentication::AccessToken.issue(user) }
 
   let(:decoded_payload) do
