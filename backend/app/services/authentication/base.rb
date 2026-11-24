@@ -29,7 +29,7 @@ module Authentication
       private
 
       def signing_secret
-        secret = Rails.application.credentials.dig(:jwt, :secret_key)
+        secret = ENV["JWT_SECRET_KEY"].presence || Rails.application.credentials.dig(:jwt, :secret_key)
 
         raise KeyError, Error::SECRET_MISSING if secret.blank?
 

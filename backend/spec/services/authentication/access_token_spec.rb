@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Authentication::AccessToken do
   let(:user) { create(:user) }
-  let(:secret) { Rails.application.credentials.dig(:jwt, :secret_key) }
+  let(:secret) { ENV["JWT_SECRET_KEY"].presence || Rails.application.credentials.dig(:jwt, :secret_key) }
 
   describe ".issue" do
     context "with a persisted user" do

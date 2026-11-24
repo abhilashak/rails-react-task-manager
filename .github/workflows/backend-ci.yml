@@ -1,0 +1,36 @@
+name: Backend CI
+
+# when should github execute the workflow?
+on:
+  # pull_request:
+  # workflow_dispatch:
+  push:
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-ci.yml"
+
+# minimum permissions required for this workflow
+permissions:
+  contents: read
+
+# a group of steps to execute
+jobs:
+  rspec:
+    name: RSpec - Ruby 4.0.9 / PostgreSQL 18
+    runs-on: ubuntu-latest
+
+    # PostgreSQL runs as a service container
+    services:
+      postgres:
+        image: postgres:18
+
+    # environment variable available to all job steps
+    env:
+      RAILS_ENV: test
+
+    # commands run from backend directory
+    defaults:
+      run:
+        working-directory: backend
+
+
