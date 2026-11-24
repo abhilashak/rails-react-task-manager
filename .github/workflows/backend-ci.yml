@@ -2,16 +2,25 @@ name: Backend CI
 
 # when should github execute the workflow?
 on:
-  # pull_request:
-  # workflow_dispatch:
   push:
     paths:
       - "backend/**"
       - ".github/workflows/backend-ci.yml"
 
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-ci.yml"
+
+  # workflow_dispatch:
+
 # minimum permissions required for this workflow
 permissions:
   contents: read
+
+# Cancel older runs when new commits arrive on the same branch.
 
 # a group of steps to execute
 jobs:
@@ -24,13 +33,48 @@ jobs:
       postgres:
         image: postgres:18
 
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: backend_test
+
+        ports:
+          - 5432:5432
+
     # environment variable available to all job steps
     env:
       RAILS_ENV: test
+      PGHOST: 127.0.0.1
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      # Test-only JWT secret. Never reuse in production.
+      JWT_SECRET_KEY: ci-only-jwt-signing-secret-do-not-use-in-production
 
     # commands run from backend directory
     defaults:
       run:
         working-directory: backend
+
+    steps:
+      # step 1: download the repository code
+      - name: checkout repository
+        uses: actions/checkout@v6
+
+      # step 2: install ruby and dependencies
+      - name: setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0.9"
+          bundler-cache: true
+          working-directory: backend
+
+      # step 3: create and migrate the test database
+      - name: prepare test database
+        run: bin/rails db:prepare
+
+      # step 4: execute rspec suite
+      - name: run RSpec
+        run: bundle exec rspec spec/
 
 
