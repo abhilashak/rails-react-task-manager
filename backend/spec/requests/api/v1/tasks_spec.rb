@@ -103,7 +103,7 @@ RSpec.describe "API V1 Tasks", type: :request do
 
       post endpoint, params: params, headers: headers
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(response.parsed_body["errors"]).to be_present
     end
   end

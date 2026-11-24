@@ -46,7 +46,7 @@ RSpec.describe "API V1 Registration", type: :request do
           post endpoint, params: valid_params, as: :json
         }.not_to change(User, :count)
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
 
         expect(response.parsed_body["errors"])
           .to include("Email has already been taken")
@@ -61,7 +61,7 @@ RSpec.describe "API V1 Registration", type: :request do
 
         post endpoint, params: params, as: :json
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
 
         expect(response.parsed_body["errors"])
           .to include("Email has already been taken")
@@ -74,7 +74,7 @@ RSpec.describe "API V1 Registration", type: :request do
 
         post endpoint, params: params, as: :json
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
 
         expect(response.parsed_body["errors"])
           .to include("Email can't be blank")
@@ -90,7 +90,7 @@ RSpec.describe "API V1 Registration", type: :request do
 
         post endpoint, params: params, as: :json
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
 
         expect(response.parsed_body["errors"])
           .to include("Password can't be blank")
@@ -103,7 +103,7 @@ RSpec.describe "API V1 Registration", type: :request do
 
         post endpoint, params: params, as: :json
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
 
         expect(response.parsed_body["errors"])
           .to include("Password confirmation doesn't match Password")

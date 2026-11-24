@@ -61,6 +61,6 @@ class Api::V1::TasksController < Api::V1::BaseController
   def render_validation_errors(task)
     render json: {
       errors: task.errors.full_messages
-    }, status: :unprocessable_entity
+    }, status: :unprocessable_content
   end
 end

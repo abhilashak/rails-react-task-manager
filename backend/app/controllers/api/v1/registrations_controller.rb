@@ -7,7 +7,7 @@ class Api::V1::RegistrationsController < ApplicationController
     if user.save
       render json: UserBlueprint.render_as_hash(user, root: :data), status: :created
     else
-      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: user.errors.full_messages }, status: :unprocessable_content
     end
   end
 
