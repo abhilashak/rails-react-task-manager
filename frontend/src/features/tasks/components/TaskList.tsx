@@ -9,14 +9,20 @@ interface TaskListProps {
 function TaskList(props: TaskListProps) {
 
   return (
-    <div>{props.tasks.map((task) => (
-      <div key={task.id} className={props.selectedTaskId == task.id ? 'selected-task' : ''}>
-        <h3>{task.title}</h3>
-        <Text>{task.description}</Text>
-        <Badge>{task.status}</Badge>
-      </div>
-    ))
-    }
+    <div className="task-list">
+      {props.tasks.map((task) => (
+        <div key={task.id} className={`task-list-item ${task.id === props.selectedTaskId
+          ? 'task-list-item--selected'
+          : ''
+          }`}>
+          <h3>{task.title}</h3>
+          <div className="task-list-item__meta">
+            <p>{task.description}</p>
+            <Badge appearance="filled">{task.status}</Badge>
+          </div>
+        </div>
+      ))
+      }
     </div>
   );
 }

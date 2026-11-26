@@ -8,15 +8,28 @@ interface TaskDetailsProps {
 function TaskDetails(props: TaskDetailsProps) {
   let task = props.task;
 
-  if (task == null) return <Text>"No Task Found"</Text>;
+  if (!task) {
+    return (
+      <div className="task-details">
+        <p>Select a task to view details.</p>
+      </div>
+    );
+  }
 
   return (
-    <div key={task.id}>
-      <h3>{task.title}</h3>
-      <Text>{task.description}</Text>
-      <Badge>{task.status}</Badge>
-      <Button appearance="secondary">Edit</Button>
-      <Button>Delete</Button>
+    <div className="task-details">
+      <h2>{task.title}</h2>
+
+      <div className="task-details__meta">
+        <p>{task.description || 'No description available.'}</p>
+
+        <Badge appearance="filled">{task.status}</Badge>
+      </div>
+
+      <div className="task-details__actions">
+        <Button appearance="secondary">Edit</Button>
+        <Button appearance="secondary">Delete</Button>
+      </div>
     </div>
   );
 }

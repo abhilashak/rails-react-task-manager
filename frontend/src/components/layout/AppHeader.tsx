@@ -1,13 +1,18 @@
-import { Button, Text } from "@fluentui/react-components";
+import { Button } from "@fluentui/react-components";
 
 function AppHeader() {
 
   return (
-    <>
-      <h2>Task Manager</h2>
-      <Text>Manage your tasks efficiently</Text>
-      <Button appearance="primary">Add Task</Button>
-    </>
+    <header className="app-header">
+      <div className="app-header__content">
+        <h1>Task Manager</h1>
+        <p>Manage your tasks efficiently</p>
+      </div>
+
+      <Button appearance="primary">
+        Add Task
+      </Button>
+    </header>
   );
 }
 
