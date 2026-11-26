@@ -1,3 +1,4 @@
+import "./App.css";
 import AppHeader from './components/layout/AppHeader';
 import type { Task } from './features/tasks/types/task';
 import TaskList from './features/tasks/components/TaskList';
@@ -36,10 +37,18 @@ function App() {
 
 
   return (
-    <div>
+    <div className="app-shell">
       <AppHeader></AppHeader>
-      <TaskList tasks={tasks} selectedTaskId={1}></TaskList>
-      <TaskDetails task={tasks[0]}></TaskDetails>
+
+      <main className="task-workspace">
+        <aside className="task-list-panel">
+          <TaskList tasks={tasks} selectedTaskId={1}></TaskList>
+        </aside>
+
+        <section className="task-details-panel">
+          <TaskDetails task={tasks[0]}></TaskDetails>
+        </section>
+      </main>
     </div>
   );
 }

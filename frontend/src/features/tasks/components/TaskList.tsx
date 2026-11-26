@@ -17,7 +17,6 @@ function TaskList(props: TaskListProps) {
       </div>
     ))
     }
-      <h3>Selected: {props.selectedTaskId}</h3>
     </div>
   );
 }
